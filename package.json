@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/Squirrel1610/TwitterClone#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.3.0",
     "pug": "^3.0.2"
   },
   "devDependencies": {
