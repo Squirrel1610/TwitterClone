@@ -1,9 +1,12 @@
 const express = require("express");
-const port = 3000;
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+
+const port = process.env.PORT;
 
 //connect mongodb
 const mongoose = require("./database");
@@ -43,6 +46,10 @@ app.get("/", middleware.requireLogin, (req, res) => {
 
   res.status(200).render("home", payload);
 });
+
+//api route
+const postsApiRoute = require("./routes/api/posts");
+app.use("/api/posts", postsApiRoute);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
