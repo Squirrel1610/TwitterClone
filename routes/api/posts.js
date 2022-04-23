@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../../schemas/PostSchema");
-const UserSchema = require("../../schemas/UserSchema");
 const User = require("../../schemas/UserSchema");
-const mongoose = require("mongoose");
 
 //select all tweet
 router.get("/", async (req, res, next) => {
   Post.find({})
     .populate("postedBy")
+    .populate("retweetData")
     .sort({ createdAt: -1 })
-    .then((results) => {
+    .then(async (results) => {
+      results = await User.populate(results, { path: "retweetData.postedBy" });
       res.status(200).send(results);
     })
     .catch((err) => {
