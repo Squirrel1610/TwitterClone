@@ -32,6 +32,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "/images/default_profile_pic.png",
     },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
   },
   { timestamps: true }
 );
