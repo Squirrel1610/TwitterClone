@@ -1,8 +1,10 @@
-$("#postTextarea").keyup((event) => {
+$("#postTextarea, #replyTextarea").keyup((event) => {
   var textbox = $(event.target);
   var value = textbox.val().trim();
 
-  var submitButton = $("#submitPostButton");
+  var isModal = textbox.parents(".modal").length == 1;
+
+  var submitButton = isModal ? $("#submitReplyButton") : $("#submitPostButton");
 
   if (value == "") {
     submitButton.prop("disabled", true);
@@ -52,6 +54,20 @@ $(document).on("click", ".likeButton", (event) => {
       }
     },
   });
+});
+
+//comment
+$("#replyModal").on("show.bs.modal", (event) => {
+  var button = $(event.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $.get(`/api/posts/${postId}`, (results) => {
+    outputPosts(results, $("#originalPostContainer"));
+  });
+});
+
+$("#replyModal").on("hidden.bs.modal", (event) => {
+  $("#originalPostContainer").html("");
 });
 
 //retweet
@@ -150,7 +166,7 @@ function createPostHtml(postData) {
                     </div>
 
                     <div class="postButtonContainer">
-                      <button>  
+                      <button data-toggle="modal" data-target="#replyModal">  
                         <i class="fa-solid fa-comment"></i>
                       </button>
                     </div>
@@ -189,5 +205,22 @@ function timeDifference(current, previous) {
     return Math.round(elapsed / msPerMonth) + " months ago";
   } else {
     return Math.round(elapsed / msPerYear) + " years ago";
+  }
+}
+
+function outputPosts(results, container) {
+  container.html("");
+
+  if (!Array.isArray(results)) {
+    results = [results];
+  }
+
+  results.forEach((result) => {
+    var html = createPostHtml(result);
+    container.append(html);
+  });
+
+  if (results.length == 0) {
+    container.append("<span class='noResults'>Nothing to show </span> ");
   }
 }

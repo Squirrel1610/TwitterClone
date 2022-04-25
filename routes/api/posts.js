@@ -5,18 +5,8 @@ const User = require("../../schemas/UserSchema");
 
 //select all tweet
 router.get("/", async (req, res, next) => {
-  Post.find({})
-    .populate("postedBy")
-    .populate("retweetData")
-    .sort({ createdAt: -1 })
-    .then(async (results) => {
-      results = await User.populate(results, { path: "retweetData.postedBy" });
-      res.status(200).send(results);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(400);
-    });
+  var results = await getPosts({});
+  res.status(200).send(results);
 });
 
 //post tweet
@@ -123,5 +113,26 @@ router.post("/:id/retweet", async (req, res, next) => {
 
   res.status(200).send(post);
 });
+
+//get specific post
+router.get("/:id", async (req, res, next) => {
+  const postId = req.params.id;
+  var results = await getPosts({ _id: postId });
+  results = results[0];
+  res.status(200).send(results);
+});
+
+//function get all posts
+async function getPosts(filter) {
+  var results = await Post.find(filter)
+    .populate("postedBy")
+    .populate("retweetData")
+    .sort({ createdAt: -1 })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return await User.populate(results, { path: "retweetData.postedBy" });
+}
 
 module.exports = router;
