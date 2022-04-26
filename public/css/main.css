@@ -104,8 +104,8 @@ button span {
     padding-top: var(--spacing);
 }
 
-.modal .posts{
-    padding:  0 0 var(--spacing) 0;
+.modal .post {
+    padding: 0 0 var(--spacing) 0;
 }
 
 .userImageContainer {
@@ -233,4 +233,9 @@ button span {
 
 .replyFlag a {
     color: var(--blue);
+}
+
+.post.largeFont .postBody,
+.post.largeFont .postFooter {
+    font-size: 23px;
 }

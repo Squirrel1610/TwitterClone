@@ -1,5 +1,6 @@
 mixin createPostForm(userLoggedIn)
     .postFormContainer 
+        h1 #{userLoggedIn.firstName} #{userLoggedIn.lastName} 
         .userImageContainer 
             img(src=userLoggedIn.profilePic, alt="User's profile picture")
         .textareaContainer 

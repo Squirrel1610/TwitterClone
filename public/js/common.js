@@ -75,7 +75,7 @@ $("#replyModal").on("show.bs.modal", (event) => {
   $("#submitReplyButton").data("id", postId);
 
   $.get(`/api/posts/${postId}`, (results) => {
-    outputPosts(results, $("#originalPostContainer"));
+    outputPosts(results.postData, $("#originalPostContainer"));
   });
 });
 
@@ -126,7 +126,7 @@ function getPostIdFromElement(element) {
   return postId;
 }
 
-function createPostHtml(postData) {
+function createPostHtml(postData, largeFont = false) {
   if (postData == null) return alert("post object is null");
 
   var isRetweet = postData.retweetData !== undefined;
@@ -152,6 +152,8 @@ function createPostHtml(postData) {
     ? "active"
     : "";
 
+  var largeFontClass = largeFont ? "largeFont" : "";
+
   var retweetText = "";
   if (isRetweet) {
     retweetText = `<span>
@@ -161,7 +163,7 @@ function createPostHtml(postData) {
   }
 
   var replyFlag = "";
-  if (postData.replyTo) {
+  if (postData.replyTo && postData.replyTo._id) {
     if (!postData.replyTo._id) {
       return alert("Reply to is not populated");
     } else if (!postData.replyTo.postedBy._id) {
@@ -173,7 +175,7 @@ function createPostHtml(postData) {
                     Replying to <a href="/profile/${replyToUsername}">@${replyToUsername}</a>
                 </div>`;
   }
-  return `<div class="post" data-id="${postData._id}">
+  return `<div class="post ${largeFontClass}" data-id="${postData._id}">
               <div class="postActionContainer">
                 ${retweetText}
               </div>
@@ -259,4 +261,21 @@ function outputPosts(results, container) {
   if (results.length == 0) {
     container.append("<span class='noResults'>Nothing to show </span> ");
   }
+}
+
+function outputPostsWithReplies(results, container) {
+  container.html("");
+
+  if (results.replyTo != undefined && results.replyTo._id !== undefined) {
+    var html = createPostHtml(results.replyTo);
+    container.append(html);
+  }
+
+  var mainPostHtml = createPostHtml(results.postData, true);
+  container.append(mainPostHtml);
+
+  results.replies.forEach((result) => {
+    var html = createPostHtml(result);
+    container.append(html);
+  });
 }

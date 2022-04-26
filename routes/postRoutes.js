@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   var payload = {
     pageTitle: "View Post",
     userLoggedIn: req.session.user,
-    userLoggedInJS: JSON.stringify(req.session.user),
+    userLoggedInJs: JSON.stringify(req.session.user),
     postId: req.params.id,
   };
 
