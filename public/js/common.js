@@ -67,7 +67,7 @@ $(document).on("click", ".likeButton", (event) => {
   });
 });
 
-//comment
+//show reply modal when click comment
 $("#replyModal").on("show.bs.modal", (event) => {
   var button = $(event.relatedTarget);
   var postId = getPostIdFromElement(button);
@@ -79,6 +79,7 @@ $("#replyModal").on("show.bs.modal", (event) => {
   });
 });
 
+//hidden reply modal
 $("#replyModal").on("hidden.bs.modal", (event) => {
   $("#originalPostContainer").html("");
 });
@@ -105,6 +106,14 @@ $(document).on("click", ".retweetButton", (event) => {
       }
     },
   });
+});
+
+$(document).on("click", ".post", (event) => {
+  var element = $(event.target);
+  var postId = getPostIdFromElement(element);
+  if (postId !== undefined && !element.is("button")) {
+    window.location.href = "/posts/" + postId;
+  }
 });
 
 function getPostIdFromElement(element) {
