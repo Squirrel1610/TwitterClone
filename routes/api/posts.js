@@ -137,6 +137,18 @@ router.get("/:id", async (req, res, next) => {
   res.status(200).send(results);
 });
 
+//delete post
+router.delete("/:id", async (req, res, next) => {
+  Post.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.sendStatus(202);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
 //function get all posts
 async function getPosts(filter) {
   var results = await Post.find(filter)
