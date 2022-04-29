@@ -41,6 +41,6 @@ mixin createDeletePostModal(userLoggedIn)
                     button.btn.btn-secondary(type='button' data-dismiss='modal') Close
                     button#deletePostButton.btn.btn-primary(type='button') Delete
 
-mixin createPostModal(userLoggedIn)
+mixin createPostModals(userLoggedIn)
     +createReplyModal(userLoggedIn)
     +createDeletePostModal()
