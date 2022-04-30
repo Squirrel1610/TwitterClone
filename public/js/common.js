@@ -117,7 +117,7 @@ $(document).on("click", ".post", (event) => {
   }
 });
 
-//delete post
+//show modal delete
 $("#deletePostModal").on("show.bs.modal", (event) => {
   var button = $(event.relatedTarget);
   var postId = getPostIdFromElement(button);
@@ -125,6 +125,7 @@ $("#deletePostModal").on("show.bs.modal", (event) => {
   $("#deletePostButton").data("id", postId);
 });
 
+//delete post
 $("#deletePostButton").click((event) => {
   var postId = $(event.target).data("id");
 
@@ -137,6 +138,39 @@ $("#deletePostButton").click((event) => {
         return;
       }
       location.reload();
+    },
+  });
+});
+
+$(document).on("click", ".followButton", (event) => {
+  var button = $(event.target);
+  var userId = button.data().user;
+
+  $.ajax({
+    url: `/api/users/${userId}/follow`,
+    type: "PUT",
+    success: (data, status, xhr) => {
+      if (xhr.status == 404) {
+        alert("user not found");
+        return;
+      }
+
+      var difference = 1;
+      if (data.following && data.following.includes(userId)) {
+        button.addClass("following");
+        button.text("Following");
+      } else {
+        button.removeClass("following");
+        button.text("Follow");
+        difference = -1;
+      }
+
+      var followersLabel = $("#followersValue");
+      if (followersLabel.length != 0) {
+        var followersText = followersLabel.text();
+        followersText = parseInt(followersText);
+        followersLabel.text(followersText + difference);
+      }
     },
   });
 });

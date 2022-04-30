@@ -55,6 +55,8 @@ app.get("/", middleware.requireLogin, (req, res) => {
 //api route
 const postsApiRoute = require("./routes/api/posts");
 app.use("/api/posts", postsApiRoute);
+const userApiRoute = require("./routes/api/users");
+app.use("/api/users/", userApiRoute);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
