@@ -2,10 +2,22 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../../schemas/PostSchema");
 const User = require("../../schemas/UserSchema");
+const app = express();
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //select all tweet
 router.get("/", async (req, res, next) => {
-  var results = await getPosts({});
+  var searchObj = req.query;
+
+  if (searchObj.isReply !== undefined) {
+    var isReply = searchObj.isReply == "true";
+    searchObj.replyTo = { $exists: isReply };
+    delete searchObj.isReply;
+  }
+
+  var results = await getPosts(searchObj);
   res.status(200).send(results);
 });
 

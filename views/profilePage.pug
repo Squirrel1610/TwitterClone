@@ -4,6 +4,10 @@ block content
     if !profileUser
         span.errorMessage Check the url you try to access
     else
+        script.
+            var profileUserId = '!{profileUser._id}';
+            var selectedTab = '!{selectedTab}';
+
         .profileHeaderContainer 
             .coverPhotoContainer 
 
@@ -14,7 +18,25 @@ block content
              if profileUser._id != userLoggedIn._id
                 a.profileButton(href=`/messages/${profileUser._id}`)
                     i.fas.fa-envelope
-        .postContainer 
+                +createFollowButton(profileUser, false)
+            .userDetailContainer
+                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                span.username @#{profileUser.username}
+                span.description  #{profileUser.description}
+
+                .followersContainer 
+                    a(href=`/profile/${profileUser.username}/following`)
+                        span.value #{0}
+                        span Following 
+                    a(href=`/profile/${profileUser.username}/followers`)
+                        span.value #{0}
+                        span Followers
+        
+        .tabsContainer 
+            +createTab("Posts", `/profile/${profileUser.username}`, selectedTab != "replies")
+            +createTab("Replies", `/profile/${profileUser.username}/replies`, selectedTab == "replies")
+
+        .postsContainer 
 
         +createPostModals(userLoggedIn)
 
