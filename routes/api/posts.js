@@ -17,6 +17,22 @@ router.get("/", async (req, res, next) => {
     delete searchObj.isReply;
   }
 
+  if (searchObj.followingOnly !== undefined) {
+    var followingOnly = searchObj.followingOnly == "true";
+    if (followingOnly) {
+      var newsfeed = [];
+      if (!req.session.user.following) {
+        req.session.user.following = [];
+      }
+      req.session.user.following.forEach((user) => {
+        newsfeed.push(user);
+      });
+      newsfeed.push(req.session.user._id);
+      searchObj.postedBy = { $in: newsfeed };
+    }
+    delete searchObj.followingOnly;
+  }
+
   var results = await getPosts(searchObj);
   res.status(200).send(results);
 });

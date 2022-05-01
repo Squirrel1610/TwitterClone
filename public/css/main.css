@@ -284,6 +284,7 @@ button span {
 .profileButton,
 .followButton
 {
+    cursor: pointer;
     border: 1px solid var(--blue);
     color: var(--blue);
     font-weight: bold;
@@ -352,6 +353,32 @@ button span {
 .tab:hover{
     color: var(--blue);
     background-color: var(--blueBackground)
+}
+
+.noResults{
+    padding: var(--spacing);
+}
+
+.resultsContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.resultsContainer .user{
+    align-items: center;
+    display: flex;
+    padding: var(--spacing);
+    border-bottom: 1px solid var(--lightGrey);
+}
+
+.resultsContainer .userImageContainer{
+    margin-top: 10px;
+}
+
+.user .userDetailsContainer
+{
+    flex: 1;
+    padding: 0 var(--spacing);
 }
 
 

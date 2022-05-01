@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require("../../schemas/PostSchema");
 const User = require("../../schemas/UserSchema");
 
+//follow user
 router.put("/:userId/follow", async (req, res, next) => {
   var userId = req.params.userId;
 
@@ -38,6 +39,30 @@ router.put("/:userId/follow", async (req, res, next) => {
   });
 
   res.status(200).send(req.session.user);
+});
+
+router.get("/:userId/following", async (req, res, next) => {
+  await User.findById(req.params.userId)
+    .populate("following")
+    .then((results) => {
+      res.status(200).send(results);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
+router.get("/:userId/followers", async (req, res, next) => {
+  await User.findById(req.params.userId)
+    .populate("followers")
+    .then((results) => {
+      res.status(200).send(results);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 module.exports = router;
