@@ -1,8 +1,8 @@
 :root {
     --blue: #1FA2F1;
     --blueLight: #9BD1F9;
+    --blueBackground: rgba(212, 237, 255, 0.6);
     --buttonHoverBg: #d4edff;
-    --blueBackground: rgba(212, 237,255, 0.6);
     --lightGrey: rgb(230, 236, 240);
     --spacing: 15px;
     --greyText: rgb(101, 119, 134);
@@ -60,7 +60,7 @@ nav a:hover {
     border-radius: 50%;
 }
 
-.wrapper > .row{
+.wrapper > .row {
     margin: 0;
 }
 
@@ -245,27 +245,27 @@ button span {
     font-size: 23px;
 }
 
-.postContentContainer .header{
+.postContentContainer .header {
     display: flex;
 }
 
-.postContentContainer .header .date{
-    flex: 1
+.postContentContainer .header .date {
+    flex: 1;
 }
 
-.errorMessage{
+.errorMessage {
     padding: var(--spacing);
 }
 
-.profileHeaderContainer .coverPhotoContainer{
+.coverPhotoSection {
     height: 180px;
     background-color: var(--blue);
     position: relative;
 }
 
-.profileHeaderContainer .userImageContainer{
-    height: 132px;
+.profileHeaderContainer .userImageContainer {
     width: 132px;
+    height: 132px;
     margin-left: var(--spacing);
     position: absolute;
     bottom: -66px;
@@ -275,71 +275,67 @@ button span {
     justify-content: center;
 }
 
-.profileHeaderContainer .userImageContainer img{
+.profileHeaderContainer .userImageContainer img {
     border: 4px solid #fff;
 }
 
-.profileHeaderContainer .profileButtonContainer{
+.profileHeaderContainer .profileButtonsContainer {
     text-align: right;
     padding: var(--spacing);
     min-height: 66px;
 }
 
 .profileButton,
-.followButton
-{
-    cursor: pointer;
+.followButton {
     border: 1px solid var(--blue);
     color: var(--blue);
     font-weight: bold;
-    padding: 5px 15px ;
+    padding: 5px 15px;
     border-radius: 60px;
     display: inline-block;
     margin-left: var(--spacing);
 }
 
 .profileButton:hover,
-.followButton:hover
-{
+.followButton:hover {
     background-color: var(--blueBackground);
 }
 
-.followButton.following{
+.followButton.following {
     background-color: var(--blue);
     color: #fff;
 }
 
-.profileHeaderContainer .userDetailContainer{
+.profileHeaderContainer .userDetailsContainer {
     display: flex;
     flex-direction: column;
     padding: 0 var(--spacing);
-
 }
 
-.followersContainer .value{
+.followersContainer .value {
     font-weight: bold;
     margin-right: 5px;
 }
 
-.followersContainer span:not(.value){
+.followersContainer span:not(.value) {
     color: var(--greyText);
 }
 
-.followersContainer a{
+.followersContainer a {
     margin-right: 15px;
 }
 
-.followersContainer a:hover{
+.followersContainer a:hover {
     border-bottom: 1px solid #000;
 }
 
-.tabsContainer{
+.tabsContainer {
     display: flex;
     border-bottom: 1px solid var(--lightGrey);
     flex-shrink: 0;
 }
 
-.tab{
+.tab {
     flex: 1;
     height: 52px;
     display: flex;
@@ -349,57 +345,67 @@ button span {
     font-weight: bold;
 }
 
-.tab.active{
+.tab.active {
     color: var(--blue);
     border-bottom: 2px solid var(--blue);
 }
 
-.tab:hover{
+.tab:hover {
     color: var(--blue);
-    background-color: var(--blueBackground)
+    background-color: var(--blueBackground);
 }
 
-.noResults{
+.noResults {
     padding: var(--spacing);
 }
 
-.resultsContainer{
+.resultsContainer {
     display: flex;
     flex-direction: column;
 }
 
-.resultsContainer .user{
-    align-items: center;
-    display: flex;
+.resultsContainer .user {
     padding: var(--spacing);
+    display: flex;
     border-bottom: 1px solid var(--lightGrey);
 }
 
-.resultsContainer .userImageContainer{
-    margin-top: 10px;
-}
-
-.user .userDetailsContainer
-{
+.user .userDetailsContainer {
     flex: 1;
-    padding: 0 var(--spacing);
+    padding: 0 var(--spacing)
 }
 
-.profilePictureButton{
+.profilePictureButton,
+.coverPhotoButton {
     position: absolute;
     font-size: 50px;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0,0,0,0.6);
     display: none;
 }
 
-.userImageContainer:hover .profilePictureButton {
+.userImageContainer:hover .profilePictureButton,
+.coverPhotoSection:hover .coverPhotoButton {
     display: block;
 }
 
-#imagePreview{
+.coverPhotoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.coverPhotoContainer img{
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+}
+
+#imagePreview,
+#coverPreview {
     width: 100%;
     display: block;
+ 
+    /* This rule is very important, please don't ignore this */
     max-width: 100%;
 }
-
-
