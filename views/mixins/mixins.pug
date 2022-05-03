@@ -44,6 +44,8 @@ mixin createDeletePostModal(userLoggedIn)
 mixin createPostModals(userLoggedIn)
     +createReplyModal(userLoggedIn)
     +createDeletePostModal()
+    +createPinnedPostModal()
+    +createUnpinnedPostModal()
 
 
 mixin createFollowButton(user, isFollowing)
@@ -90,3 +92,31 @@ mixin createCoverPhotoUploadModal()
                 .modal-footer
                     button.btn.btn-secondary(type='button' data-dismiss='modal') Close
                     button#coverPhotoButton.btn.btn-primary(type='button') Upload
+
+mixin createPinnedPostModal()
+    #confirmPinModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='confirmPinModalLabel' aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#confirmPinModalLabel.modal-title Pin this post?
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    p This post will appear at the top of your profile. You can only pin one post.
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                    button#pinPostButton.btn.btn-primary(type='button') Yes
+
+mixin createUnpinnedPostModal()
+    #unpinModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='unpinModalLabel' aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#unpinModalLabel.modal-title Unpin this post?
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    p This post will be unpinned
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                    button#unpinPostButton.btn.btn-primary(type='button') Yes

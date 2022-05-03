@@ -177,6 +177,28 @@ router.delete("/:id", async (req, res, next) => {
     });
 });
 
+//pinned the post
+router.put("/:id", async (req, res, next) => {
+  if (req.body.pinned !== undefined) {
+    await Post.updateMany(
+      { postedBy: req.session.user._id },
+      { pinned: false }
+    ).catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+  }
+
+  Post.findByIdAndUpdate(req.params.id, req.body)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
 //function get all posts
 async function getPosts(filter) {
   var results = await Post.find(filter)
