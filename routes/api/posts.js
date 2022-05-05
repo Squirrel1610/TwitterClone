@@ -11,12 +11,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 router.get("/", async (req, res, next) => {
   var searchObj = req.query;
 
+  //show reply post in profile
   if (searchObj.isReply !== undefined) {
     var isReply = searchObj.isReply == "true";
     searchObj.replyTo = { $exists: isReply };
     delete searchObj.isReply;
   }
 
+  //show post on userLoggedIn newfeed
   if (searchObj.followingOnly !== undefined) {
     var followingOnly = searchObj.followingOnly == "true";
     if (followingOnly) {
@@ -31,6 +33,12 @@ router.get("/", async (req, res, next) => {
       searchObj.postedBy = { $in: newsfeed };
     }
     delete searchObj.followingOnly;
+  }
+
+  //search posts
+  if (searchObj.search !== undefined) {
+    searchObj.content = { $regex: searchObj.search, $options: "i" };
+    delete searchObj.search;
   }
 
   var results = await getPosts(searchObj);

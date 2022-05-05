@@ -129,4 +129,26 @@ router.post(
   }
 );
 
+//search user
+router.get("/", async (req, res, next) => {
+  var searchObj = req.query;
+  if (searchObj.search !== undefined) {
+    searchObj = {
+      $or: [
+        { firstName: { $regex: searchObj.search, $options: "i" } },
+        { lastName: { $regex: searchObj.search, $options: "i" } },
+        { username: { $regex: searchObj.search, $options: "i" } },
+        { email: { $regex: searchObj.search, $options: "i" } },
+      ],
+    };
+  }
+
+  await User.find(searchObj)
+    .then((results) => res.status(200).send(results))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
 module.exports = router;
