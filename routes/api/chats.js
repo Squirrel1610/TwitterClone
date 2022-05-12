@@ -48,4 +48,31 @@ router.get("/", async (req, res, next) => {
     });
 });
 
+//change chat name
+router.put("/:chatId", async (req, res, next) => {
+  await Chat.findByIdAndUpdate(req.params.chatId, req.body)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
+router.get("/:chatId", async (req, res, next) => {
+  await Chat.findOne({
+    _id: req.params.chatId,
+    users: { $elemMatch: { $eq: req.session.user._id } },
+  })
+    .populate("users")
+    .then((results) => {
+      res.status(200).send(results);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
 module.exports = router;
