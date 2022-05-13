@@ -65,6 +65,8 @@ const userApiRoute = require("./routes/api/users");
 app.use("/api/users/", userApiRoute);
 const chatsApiRoute = require("./routes/api/chats");
 app.use("/api/chats", chatsApiRoute);
+const messagesApiRoute = require("./routes/api/messages");
+app.use("/api/messages", messagesApiRoute);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
