@@ -11,6 +11,13 @@ const port = process.env.PORT;
 //connect mongodb
 const mongoose = require("./database");
 
+const server = app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+//socket io
+const io = require("socket.io")(server, { pingTimeout: 60000 });
+
 //template engine
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -68,6 +75,33 @@ app.use("/api/chats", chatsApiRoute);
 const messagesApiRoute = require("./routes/api/messages");
 app.use("/api/messages", messagesApiRoute);
 
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+//socket io
+io.on("connection", (socket) => {
+  //khi nguoi dung nao dang nhap
+  socket.on("setup", (userData) => {
+    //join vao room cua chinh minh
+    socket.join(userData._id);
+    //phat su kien da ket noi
+    socket.emit("connected");
+  });
+
+  //server nhan su kien join cuoc tro chuyen co ma la chatID
+  socket.on("join room", (room) => {
+    socket.join(room);
+  });
+
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+  socket.on("new message", (newMessage) => {
+    var chat = newMessage.chat;
+
+    if (!chat.users) return console.log("Chat.users not defined");
+
+    chat.users.forEach((user) => {
+      if (user._id == newMessage.sender._id) return;
+      socket.in(user._id).emit("message received", newMessage);
+    });
+  });
 });

@@ -1,4 +1,13 @@
+var typing = false;
+var lastTypingTime;
+
 $(document).ready(() => {
+  //khi mo 1 cuoc tro chuyen, phat su kien join vao room co ma la chatID
+  socket.emit("join room", chatId);
+
+  socket.on("typing", () => $(".typingDots").show());
+  socket.on("stop typing", () => $(".typingDots").hide());
+
   $.get(`/api/chats/${chatId}`, (data) =>
     $("#chatName").text(getChatName(data))
   );
@@ -45,11 +54,37 @@ $(".sendMessageButton").click(() => {
 });
 
 $(".inputTextbox").keydown((event) => {
+  //khi nguoi khac dang nhan gi do thi nguoi nhan se thay nguoi dang gui tin nhan
+  updateTyping();
+
   if (event.which === 13 && !event.shiftKey) {
     messageSubmitted();
     return false;
   }
 });
+
+function updateTyping() {
+  if (!connected) return;
+
+  if (!typing) {
+    typing = true;
+    socket.emit("typing", chatId);
+  }
+
+  lastTypingTime = new Date().getTime();
+  var timerLength = 3000;
+
+  setTimeout(() => {
+    var timeNow = new Date().getTime();
+    var timeDiff = timeNow - lastTypingTime;
+    if (timeDiff >= timerLength && typing) {
+      socket.emit("stop typing", chatId);
+      typing = false;
+    }
+  }, timerLength);
+
+  socket.emit("typing", chatId);
+}
 
 function addMessagesHtmlToPage(html) {
   $(".chatMessages").append(html);
@@ -63,6 +98,8 @@ function messageSubmitted() {
   if (content != "") {
     sendMessage(content);
     $(".inputTextbox").val("");
+    socket.emit("stop typing", chatId);
+    typing = false;
   }
 }
 
@@ -78,6 +115,10 @@ function sendMessage(content) {
       }
 
       addChatMessageHtml(data);
+
+      if(connected){
+        socket.emit("new message", data)
+      }
     }
   );
 }

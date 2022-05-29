@@ -667,3 +667,11 @@ function getOtherChatUsers(users) {
     return user._id != userLoggedIn._id;
   });
 }
+
+function messageReceived(newMessage) {
+  if ($(".chatContainer").length == 0) {
+    // Show popup notification
+  } else {
+    addChatMessageHtml(newMessage);
+  }
+}
