@@ -76,6 +76,8 @@ const chatsApiRoute = require("./routes/api/chats");
 app.use("/api/chats", chatsApiRoute);
 const messagesApiRoute = require("./routes/api/messages");
 app.use("/api/messages", messagesApiRoute);
+const notificationApiRoute = require("./routes/api/notifications");
+app.use("/api/notifications", notificationApiRoute);
 
 //socket io
 io.on("connection", (socket) => {
