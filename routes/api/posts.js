@@ -5,7 +5,6 @@ const User = require("../../schemas/UserSchema");
 const Notification = require("../../schemas/NotificationSchema");
 const app = express();
 const bodyParser = require("body-parser");
-const { path } = require("express/lib/application");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
