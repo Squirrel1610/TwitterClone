@@ -50,4 +50,10 @@ function insertNotifications(chat, message) {
   });
 }
 
+//xoa het tin nhan
+router.delete("/deleteAll", async (req, res) => {
+  await Message.deleteMany({});
+  res.status(200).json("successfully");
+});
+
 module.exports = router;
