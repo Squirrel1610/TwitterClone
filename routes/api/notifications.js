@@ -6,10 +6,16 @@ const Message = require("../../schemas/MessageSchema");
 const Notification = require("../../schemas/NotificationSchema");
 
 router.get("/", async (req, res, next) => {
-  await Notification.find({
+  var searchObj = {
     userTo: req.session.user._id,
     notificationType: { $ne: "newMessage" },
-  })
+  };
+
+  if (req.query.unreadOnly !== undefined && req.query.unreadOnly == "true") {
+    searchObj.opened = false;
+  }
+
+  await Notification.find(searchObj)
     .populate("userTo")
     .populate("userFrom")
     .sort({ createdAt: -1 })
