@@ -59,6 +59,11 @@ const UserSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+
+    role: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

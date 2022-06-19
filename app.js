@@ -6,6 +6,9 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 const port = process.env.PORT;
 
 //connect mongodb
@@ -78,6 +81,16 @@ const messagesApiRoute = require("./routes/api/messages");
 app.use("/api/messages", messagesApiRoute);
 const notificationApiRoute = require("./routes/api/notifications");
 app.use("/api/notifications", notificationApiRoute);
+
+//api admin
+const userApiAdminRoute = require("./routes/apiAdmin/users");
+app.use("/api/admin/user/", userApiAdminRoute);
+const postApiAdminRoute = require("./routes/apiAdmin/posts");
+app.use("/api/admin/post/", postApiAdminRoute);
+const chatApiAdminRoute = require("./routes/apiAdmin/chats");
+app.use("/api/admin/chat", chatApiAdminRoute);
+const messageApiAdminRoute = require("./routes/apiAdmin/messages");
+app.use("/api/admin/message", messageApiAdminRoute);
 
 //socket io
 io.on("connection", (socket) => {
