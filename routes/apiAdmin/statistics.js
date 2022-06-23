@@ -109,7 +109,7 @@ router.get(
 );
 
 //lấy ra tổng số lượng người tham gia mạng xã hội, tổng bài đăng và tổng cuộc trò chuyện
-router.get("/sum/user_post_chat", async (req, res) => {
+router.get("/sum/user_post_chat", middleware.authAdmin, async (req, res) => {
   try {
     var sum_of_users = await User.aggregate([
       { $match: { role: false } },
