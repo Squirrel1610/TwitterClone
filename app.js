@@ -91,6 +91,8 @@ const chatApiAdminRoute = require("./routes/apiAdmin/chats");
 app.use("/api/admin/chat", chatApiAdminRoute);
 const messageApiAdminRoute = require("./routes/apiAdmin/messages");
 app.use("/api/admin/message", messageApiAdminRoute);
+const statisticsApiAdminRoute = require("./routes/apiAdmin/statistics");
+app.use("/api/admin/statistics", statisticsApiAdminRoute);
 
 //socket io
 io.on("connection", (socket) => {

@@ -247,6 +247,7 @@ $("#filePhoto").change(function () {
   if (this.files && this.files[0]) {
     var reader = new FileReader();
     reader.onload = (e) => {
+      console.log(e.target.result)
       var image = document.getElementById("imagePreview");
       image.src = e.target.result;
 
@@ -260,6 +261,7 @@ $("#filePhoto").change(function () {
       });
     };
     reader.readAsDataURL(this.files[0]);
+    
   } else {
     console.log("nope");
   }

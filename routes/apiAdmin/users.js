@@ -3,6 +3,10 @@ const User = require("../../schemas/UserSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const middleware = require("../../middleware");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/images/" });
+const path = require("path");
+const fs = require("fs");
 
 //đăng ký tài khoản admin
 router.post("/register", async (req, res) => {
@@ -299,6 +303,104 @@ router.get("/:userId/followersList", middleware.authAdmin, async (req, res) => {
       status: 400,
       success: false,
       msg: "Failed to get list followers",
+    });
+  }
+});
+
+//lấy ra profile tài khoản admin đang đăng nhập
+router.get("/profile", middleware.authAdmin, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    var profile = await User.findById(userId).select(
+      "-likes -retweets -following -followers"
+    );
+
+    return res.json({
+      status: 200,
+      success: true,
+      msg: "Get profile successfully",
+      data: profile,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.json({
+      status: 400,
+      success: false,
+      msg: "Failed to get profile",
+    });
+  }
+});
+
+//thay đổi ảnh đại diện cá nhân của admin
+router.post(
+  "/upload/profilePicture",
+  middleware.authAdmin,
+  upload.single("file"),
+  async (req, res, next) => {
+    if (!req.file) {
+      return res.json({
+        status: 400,
+        success: false,
+        msg: "Not find file to upload",
+      });
+    }
+    var extFile = path.extname(req.file.originalname);
+    var filePath = `/uploads/images/${req.file.filename}${extFile}`;
+    var tempPath = req.file.path;
+    var targetPath = path.join(__dirname, `../../${filePath}`);
+
+    fs.rename(tempPath, targetPath, async (error) => {
+      if (error != null) {
+        console.log(error);
+        return res.json({
+          status: 400,
+          success: false,
+          msg: "Failed to rename file",
+        });
+      }
+    });
+
+    var user = await User.findByIdAndUpdate(
+      req.user.id,
+      { profilePic: filePath },
+      { new: true }
+    );
+
+    return res.json({
+      status: 200,
+      success: true,
+      msg: "Upload image successfully",
+      url: `http://localhost:3000${filePath}`,
+    });
+  }
+);
+
+//thay đổi thông tin profile admin
+router.patch("/profile", middleware.authAdmin, async (req, res, next) => {
+  const { firstName, lastName } = req.body;
+  const userId = req.user.id;
+
+  try {
+    var user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: { firstName, lastName },
+      },
+      { new: true }
+    );
+
+    return res.json({
+      status: 200,
+      success: true,
+      msg: "Updated profile successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      status: 400,
+      success: false,
+      msg: "Failed to update profile",
     });
   }
 });

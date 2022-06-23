@@ -88,7 +88,9 @@ router.post(
       console.log("No file uploaded with ajax request");
       return res.sendStatus(400);
     }
+    console.log(req.file)
 
+    // var extFile = req.file.originalname
     var filePath = `/uploads/images/${req.file.filename}.png`;
     var tempPath = req.file.path;
     var targetPath = path.join(__dirname, `../../${filePath}`);
