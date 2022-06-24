@@ -91,6 +91,8 @@ router.get(
 
       var monthlyRegisteredUsers = statistics.concat(missing_statistics);
 
+      monthlyRegisteredUsers.sort((a, b) => a._id - b._id);
+
       return res.json({
         status: 200,
         success: true,
