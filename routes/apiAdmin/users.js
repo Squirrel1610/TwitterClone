@@ -370,7 +370,7 @@ router.post(
       status: 200,
       success: true,
       msg: "Upload image successfully",
-      url: `http://localhost:3000${filePath}`,
+      url: `http://localhost:${process.env.PORT}${filePath}`,
     });
   }
 );
