@@ -143,52 +143,79 @@ router.get("/sum/user_post_chat", middleware.authAdmin, async (req, res) => {
 });
 
 //Lấy ra danh sách những người dùng đăng trên 5 bài tweet trong 1 tuần và sắp xếp
-router.get("/listTotalPostsOfEachUserInAWeek/", async (req, res, next) => {
-  try {
-    const now = new Date();
-    var listTotalPostsOfEachUser = await Post.aggregate([
-      {
-        $project: {
-          postedBy: 1,
-          // range: get_day_of_time("$createdAt", now),
+router.get(
+  "/listTotalPostsOfEachUserInAWeek/",
+  middleware.authAdmin,
+  async (req, res, next) => {
+    try {
+      const now = new Date();
+      var listTotalPostsOfEachUser = await Post.aggregate([
+        {
+          $project: {
+            postedBy: 1,
+            // get dateRange = 7 days
+            dateRange: {
+              $ceil: {
+                $divide: [
+                  {
+                    $abs: {
+                      $subtract: [now, "$createdAt"],
+                    },
+                  },
+                  86400000, //1 day
+                ],
+              },
+            },
+          },
         },
-      },
-      // {
-      //   $match: {
-      //     range: { $lte: 7 },
-      //   },
-      // },
-      {
-        $group: {
-          _id: "$postedBy",
-          count: { $sum: 1 },
+        {
+          $match: {
+            dateRange: { $lte: 7 },
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "_id",
-          foreignField: "_id",
-          as: "user",
+        {
+          $group: {
+            _id: "$postedBy",
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]);
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $sort: { count: -1 },
+        },
+      ]);
 
-    return res.json({
-      status: 200,
-      success: true,
-      msg: "Get list total posts of each user in a week",
-      data: listTotalPostsOfEachUser,
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.json({
-      status: 400,
-      success: false,
-      msg: "Failed to get list total posts of each user in a week",
-    });
+      var data = [];
+
+      for (let i = 0; i < listTotalPostsOfEachUser.length; i++) {
+        if (listTotalPostsOfEachUser[i].count >= 5) {
+          data.push(listTotalPostsOfEachUser[i]);
+        }
+      }
+
+      return res.json({
+        status: 200,
+        success: true,
+        msg: "Get list total posts of each user in a week",
+        data: data,
+      });
+    } catch (error) {
+      console.log(error.message);
+      return res.json({
+        status: 400,
+        success: false,
+        msg: "Failed to get list total posts of each user in a week",
+      });
+    }
   }
-});
+);
 
 const get_day_of_time = (d1, d2) => {
   let ms1 = d1.getTime();
