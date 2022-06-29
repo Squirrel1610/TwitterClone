@@ -6,6 +6,11 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
+const cors = require("cors");
+app.use(cors());
+
+app.use(express.json());
+
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 

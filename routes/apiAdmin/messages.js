@@ -24,9 +24,10 @@ router.get("/getAll", middleware.authAdmin, async (req, res) => {
   }
 });
 
-router.get("/:messageId/info", middleware.authAdmin, async (req, res) => {
+router.get("/:messageId/info", async (req, res) => {
   try {
-    const messages = await Message.find({})
+    const messageId = req.params.messageId;
+    const message = await Message.findById(messageId)
       .populate("sender")
       .populate("readBy");
 
@@ -34,7 +35,7 @@ router.get("/:messageId/info", middleware.authAdmin, async (req, res) => {
       status: 200,
       success: true,
       msg: "Get info message successfully",
-      data: messages,
+      data: message,
     });
   } catch (error) {
     console.log(error.message);

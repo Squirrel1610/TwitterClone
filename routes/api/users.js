@@ -88,7 +88,7 @@ router.post(
       console.log("No file uploaded with ajax request");
       return res.sendStatus(400);
     }
-    console.log(req.file)
+    console.log(req.file);
 
     // var extFile = req.file.originalname
     var filePath = `/uploads/images/${req.file.filename}.png`;
@@ -146,6 +146,7 @@ router.get("/", async (req, res, next) => {
   var searchObj = req.query;
   if (searchObj.search !== undefined) {
     searchObj = {
+      role: false,
       $or: [
         { firstName: { $regex: searchObj.search, $options: "i" } },
         { lastName: { $regex: searchObj.search, $options: "i" } },
