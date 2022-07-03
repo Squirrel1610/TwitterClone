@@ -142,7 +142,7 @@ router.get("/sum/user_post_chat", middleware.authAdmin, async (req, res) => {
   }
 });
 
-//Lấy ra danh sách những người dùng đăng trên 5 bài tweet trong 1 tuần và sắp xếp
+//Lấy ra danh sách những người dùng đăng trên 3 bài tweet trong 1 tuần và sắp xếp
 router.get(
   "/listTotalPostsOfEachUserInAWeek/",
   middleware.authAdmin,
@@ -195,7 +195,7 @@ router.get(
       var data = [];
 
       for (let i = 0; i < listTotalPostsOfEachUser.length; i++) {
-        if (listTotalPostsOfEachUser[i].count >= 5) {
+        if (listTotalPostsOfEachUser[i].count >= 3) {
           data.push(listTotalPostsOfEachUser[i]);
         }
       }
