@@ -1,6 +1,6 @@
 var connected = false;
 
-var socket = io("http://localhost:3000");
+var socket = io("http://localhost:5003");
 
 //su kien setup khi nguoi dung dang nhap
 socket.emit("setup", userLoggedIn);
